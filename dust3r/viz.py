@@ -42,7 +42,7 @@ def pts3d_to_trimesh(img, pts3d, valid=None):
     assert THREE == 3
     assert img.shape == pts3d.shape
 
-    vertices = pts3d.reshape(-1, 3)
+    vertices = to_numpy(pts3d.reshape(-1, 3))
 
     # make squares: each pixel == 2 triangles
     idx = np.arange(len(vertices)).reshape(H, W)
@@ -68,7 +68,7 @@ def pts3d_to_trimesh(img, pts3d, valid=None):
     # remove invalid faces
     if valid is not None:
         assert valid.shape == (H, W)
-        valid_idxs = valid.ravel()
+        valid_idxs = to_numpy(valid.ravel())
         valid_faces = valid_idxs[faces].all(axis=-1)
         faces = faces[valid_faces]
         face_colors = face_colors[valid_faces]
@@ -154,7 +154,7 @@ class SceneViz:
         if isinstance(color, (list, np.ndarray, torch.Tensor)):
             color = to_numpy(color)
             col = np.concatenate([p[m] for p,m in zip(color,mask)])
-            assert col.shape == pts.shape, bb()
+            assert col.shape == pts.shape
             pct.visual.vertex_colors = uint8(col.reshape(-1,3))
         else:
             assert len(color) == 3
