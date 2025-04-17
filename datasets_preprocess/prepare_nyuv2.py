@@ -4,6 +4,7 @@ import numpy as np
 import os
 from glob import glob
 from PIL import Image
+from tqdm import tqdm
 
 # Set the path to your dataset directory
 dataset_dir = '../data/nyu-v2/val/official/'
@@ -17,7 +18,7 @@ output_depth_dir = '../data/nyu-v2/val/nyu_depths/'
 os.makedirs(output_image_dir, exist_ok=True)
 os.makedirs(output_depth_dir, exist_ok=True)
 
-for file_path in file_paths:
+for file_path in tqdm(file_paths):
     with h5py.File(file_path, 'r') as h5file:
         # Read depth and rgb data
         depth_data = h5file['depth'][:]
@@ -40,7 +41,7 @@ for file_path in file_paths:
         # Save the depth data as NPY file
         np.save(os.path.join(output_depth_dir, f'{base_name}.npy'), depth_data)
         
-        print(f'Processed {base_name}')
+        tqdm.write(f'Processed {base_name}')
 
 
 # %%
@@ -56,7 +57,7 @@ output_img_dir = '../data/nyu-v2/val/nyu_depth_imgs'
 os.makedirs(output_img_dir, exist_ok=True)
 
 # Iterate over all .npy files in the depth directory
-for npy_file in os.listdir(depth_npy_dir):
+for npy_file in tqdm(os.listdir(depth_npy_dir)):
     if npy_file.endswith('.npy'):
         # Load depth data from .npy file
         depth_path = os.path.join(depth_npy_dir, npy_file)
@@ -76,7 +77,7 @@ for npy_file in os.listdir(depth_npy_dir):
         img_save_path = os.path.join(output_img_dir, img_name)
         depth_img.save(img_save_path)
         
-        print(f'Saved {img_save_path}')
+        tqdm.write(f'Saved {img_save_path}')
 
 print("Conversion completed!")
 

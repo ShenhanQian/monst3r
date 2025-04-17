@@ -3,6 +3,7 @@
 
 from PIL import Image
 import numpy as np
+from tqdm import tqdm
 
 
 def depth_read(filename):
@@ -23,20 +24,20 @@ import glob
 import os
 import shutil
 depth_dirs = glob.glob("../data/kitti/val/*/proj_depth/groundtruth/image_02")
-for dir in depth_dirs:
+for dir in tqdm(depth_dirs):
     # new depth dir
     new_depth_dir = "../data/kitti/depth_selection/val_selection_cropped/groundtruth_depth_gathered/" + dir.split("/")[-4]+"_02"
     # print(new_depth_dir)
     new_image_dir = "../data/kitti/depth_selection/val_selection_cropped/image_gathered/" + dir.split("/")[-4]+"_02"
     os.makedirs(new_depth_dir, exist_ok=True)
     os.makedirs(new_image_dir, exist_ok=True)
-    for depth_file in sorted(glob.glob(dir + "/*.png"))[:110]: #../data/kitti/val/2011_09_26_drive_0002_sync/proj_depth/groundtruth/image_02/0000000005.png
+    for depth_file in tqdm(sorted(glob.glob(dir + "/*.png"))[:110], leave=False): #../data/kitti/val/2011_09_26_drive_0002_sync/proj_depth/groundtruth/image_02/0000000005.png
         new_path = new_depth_dir + "/" + depth_file.split("/")[-1]
         shutil.copy(depth_file, new_path)
         # get the path of the corresponding image
         mid = "_".join(depth_file.split("/")[4].split("_")[:3])
         image_file = depth_file.replace('val', mid).replace('proj_depth/groundtruth/image_02', 'image_02/data')
-        print(image_file)
+        tqdm.write(image_file)
         # check if the image file exists
         if os.path.exists(image_file):
             new_path = new_image_dir + "/" + image_file.split("/")[-1]

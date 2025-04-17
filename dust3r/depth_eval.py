@@ -22,6 +22,7 @@ def eval_mono_depth_estimation(args, model, device):
     img_path = metadata.get('img_path')
     if 'img_path_func' in metadata:
         img_path = metadata['img_path_func'](args)
+    assert os.path.exists(img_path), f"Image path does not exist: {img_path}"
     
     process_func = metadata.get('process_func')
     if process_func is None:

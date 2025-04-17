@@ -1,7 +1,8 @@
 import glob
 import os
 import shutil
-import numpy as np
+from tqdm import tqdm
+
 
 def read_file_list(filename):
     """
@@ -61,7 +62,7 @@ def associate(first_list, second_list, offset, max_difference):
 dirs = glob.glob("../data/tum/*/")
 dirs = sorted(dirs)
 # extract frames
-for dir in dirs:
+for dir in tqdm(dirs):
     frames = []
     gt = []
     first_file = dir + 'rgb.txt'
@@ -82,7 +83,7 @@ for dir in dirs:
     # cut frames after 90
     new_dir = dir + 'rgb_90/'
 
-    for frame in frames:
+    for frame in tqdm(frames, desc='copying frames', leave=False):
         os.makedirs(new_dir, exist_ok=True)
         shutil.copy(frame, new_dir)
         # print(f'cp {frame} {new_dir}')

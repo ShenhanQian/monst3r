@@ -63,7 +63,7 @@ cd ..
 To download and prepare the **TUM-dynamics** dataset, execute:
 ```bash
 cd data
-bash download_tum.sh
+bash download_tum_dynamics.sh
 cd ..
 
 # prepare the dataset for pose evaluation

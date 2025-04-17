@@ -13,7 +13,7 @@ data = np.load(file_path)
 
 scenes, frames, pairs = data['scenes'], data['frames'], data['pairs']
 
-new_scenes = glob.glob("data/waymo_processed/*.tfrecord/")
+new_scenes = glob.glob("data/waymo/*.tfrecord/")
 new_scenes_last = [scene.split("/")[-2] for scene in new_scenes]
 img_lens = []
 for path in tqdm(new_scenes):
@@ -53,5 +53,5 @@ for path in tqdm(new_scenes):
                 new_pairs.append([new_scenes_last.index(path.split("/")[-2]), new_frames.index(imgs_track5[i].split('/')[-1].replace('.jpg','')), new_frames.index(imgs_track5[i+stride].split('/')[-1].replace('.jpg',''))])
 
 print(len(new_pairs), "pairs")
-save_path = "data/waymo_processed/waymo_pairs_video.npz"
+save_path = "data/waymo/waymo_pairs_video.npz"
 np.savez(save_path, scenes=np.array(new_scenes_last), frames=np.array(new_frames), pairs=np.array(new_pairs))
